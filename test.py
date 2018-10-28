@@ -1,5 +1,7 @@
 ### Import our module
 from mcuuid.api import GetPlayerData
+from mcuuid.tools import is_valid_minecraft_username
+from mcuuid.tools import is_valid_mojang_uuid
 
 ### Import some other necessary modules
 import sys
@@ -7,24 +9,35 @@ import sys
 ### Which username should we use?
 # Are there some arguments brought by the console use the first after the filename as username
 if len(sys.argv) > 1:
-    username = sys.argv[1]
+    identifier = sys.argv[1]
 # Else, ask for a username by userinput
 else:
-    print("Please enter a username: ")
-    username = raw_input()
+    print("Please enter a username or UUID: ")
+    identifier = raw_input()
 
-### Obtaining the playerinformation using our module
-player = GetPlayerData(username)
-# Check if the request was valid and the user exists
-if player.valid is True:
-    # Getting UUID
-    uuid = player.uuid
-    # Getting real Username
-    name = player.username
+if is_valid_minecraft_username(identifier) or is_valid_mojang_uuid(identifier):
+    if is_valid_minecraft_username(identifier):
+        print('Valid username')
+    if is_valid_mojang_uuid(identifier):
+        print('Valid UUID')
 
-    # Print everything
-    print('UUID: ' + uuid)
-    print('correct name: ' + name)
-# Error message
+    ### Obtaining the playerinformation using our module
+    player = GetPlayerData(identifier)
+    # Check if the request was valid and the user exists
+    if player.valid is True:
+        # Getting UUID
+        uuid = player.uuid
+        # Getting real Username
+        name = player.username
+
+        # Print everything
+        print('UUID: ' + uuid)
+        print('correct name: ' + name)
+
+
+    # Error message
+    else:
+        print("That player was not found.")
+
 else:
-    print("That player was not found.")
+    print('identifier is not valid')
