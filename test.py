@@ -1,5 +1,5 @@
 ### Import our module
-from mcuuid.mcuuid import GetPlayerData
+from mcuuid import GetPlayerData
 
 ### Import some other necessary modules
 import sys
