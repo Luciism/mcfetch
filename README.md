@@ -49,6 +49,45 @@ if is_valid_mojang_uuid('a2080281c2784181b961d99ed2f3347c'):
   print('Valid')
 ```
 
+## Documentation
+### Module `mcuuid.api`
+#### Class `GetPlayerData(indentifier, timestamp=None)`
+##### Parameters
+- `identifier`: string - a Minecraft username or Mojang UUID
+- `timestamp`: int - a unix timestamp
+
+##### Returns
+`player` object
+
+#### Object `player`
+##### Value `player.uuid`
+Mojang UUID
+
+##### Value `player.username`
+Minecraft username
+
+### Module `mcuuid.tools`
+#### Function `is_valid_minecraft_username(username)`
+##### Parameters
+- `username`: string - a Minecraft username
+
+##### Returns
+`True` or `False`
+
+#### Function `is_valid_mojang_uuid(uuid)`
+##### Parameters
+- `uuid`: string - a Mojang UUID
+
+##### Returns
+`True` or `False`
+
+#### Function `cleanup_uuid(uuid)`
+##### Parameters
+- `uuid`: string - a Mojang UUID
+
+##### Returns
+`uuid` as string, lowered. Without dashes
+
 ## Test file
 Usage
 ```

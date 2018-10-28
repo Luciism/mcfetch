@@ -20,7 +20,7 @@ if len(sys.argv) > 1:
 # Else, ask for a identifier by userinput
 else:
     print("Please enter a username or UUID: ")
-    identifier = raw_input()
+    identifier = input()
 
 ### Is the identifier a valid value?
 if is_valid_minecraft_username(identifier) or is_valid_mojang_uuid(identifier):

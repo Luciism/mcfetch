@@ -29,3 +29,8 @@ def is_valid_mojang_uuid(uuid):
             return False
 
     return True
+
+def cleanup_uuid(uuid):
+    uuid = uuid.lower()
+    uuid = uuid.replace('-', '')
+    return uuid

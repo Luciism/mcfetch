@@ -7,8 +7,8 @@ Uses the official Mojang API to fetch player data.
 ### Import necessary modules
 import http.client
 import json
-from tools import is_valid_minecraft_username
-from tools import is_valid_mojang_uuid
+from mcuuid.tools import is_valid_minecraft_username
+from mcuuid.tools import is_valid_mojang_uuid
 
 ### Main class
 class GetPlayerData:
