@@ -6,7 +6,7 @@ Getting Minecraft Player Information from Mojang API.
 2. Use the module like this:
 
 ```
-from mcuuid import GetPlayerData
+from mcuuid.api import GetPlayerData
 
 player = GetPlayerData(username)
 
