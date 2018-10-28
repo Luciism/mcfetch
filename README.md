@@ -23,6 +23,15 @@ When `identifier = "gronkh"`:
 and `name` will be `"Gronkh"`
 
 
+```
+player = GetPlayerData(identifier, timestamp)
+```
+
+Some names are time-sensitive. (When they are changed)
+So you can choose a special time.
+
+It even works with UUIDs. They respond the username at the given time.
+
 ### Tools
 Syntax check of username
 ```

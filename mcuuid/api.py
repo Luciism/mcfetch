@@ -30,6 +30,7 @@ class GetPlayerData:
         if timestamp is not None:
             get_args = "?at=" + str(timestamp)
 
+        # Build the request path based on the identifier
         req = ""
         if is_valid_minecraft_username(identifier):
             req = "/users/profiles/minecraft/" + identifier + get_args
@@ -38,8 +39,9 @@ class GetPlayerData:
         else:
             self.valid = False
 
+        # Proceed only, when the identifier was valid
         if self.valid:
-            # Request the UUID
+            # Request the player data
             http_conn = http.client.HTTPSConnection("api.mojang.com");
             http_conn.request("GET", req,
                 headers={'User-Agent':'https://github.com/clerie/mcuuid', 'Content-Type':'application/json'});
@@ -52,31 +54,34 @@ class GetPlayerData:
             else:
                 # Parse the JSON
                 json_data = json.loads(response)
+
+                ### Handle the response of the different requests on different ways
+                # Request using username
                 if is_valid_minecraft_username(identifier):
                     # The UUID
                     self.uuid = json_data['id']
                     # The username written correctly
                     self.username = json_data['name']
+                #Request using UUID
                 elif is_valid_mojang_uuid(identifier):
                     # The UUID
                     self.uuid = identifier
 
-                    if timestamp is None:
-                        timestamp = 0
-
                     current_name = ""
                     current_time = 0
 
-                    # Getting the current username
+                    # Getting the username based on timestamp
                     for name in json_data:
-                        if 'changedToAt' in name:
-                            changed_to_at = name['changedToAt']
-                        else:
-                            changed_to_at = 0
+                        # Prepare the JSON
+                        # The first name has no change time
+                        if 'changedToAt' not in name:
+                            name['changedToAt'] = 0
 
-                        if changed_to_at <= timestamp and current_time <= changed_to_at:
-                            current_time = changed_to_at
+                        # Get the right name on timestamp
+                        if current_time <= name['changedToAt'] and (timestamp is None or name['changedToAt'] <= timestamp):
+                            current_time = name['changedToAt']
                             current_name = name['name']
 
+
                     # The username written correctly
-                    self.username = name['name']
+                    self.username = current_name
