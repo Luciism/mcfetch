@@ -2,7 +2,7 @@
 Getting Minecraft Player Information from Mojang API.
 
 ## Usage
-1. `pip install mcuuid` OR add the mcuuid.py file to your Python path.
+1. `pip install mcuuid`
 2. Use the module like this:
 
 ```

@@ -1,2 +1,2 @@
 name = "mcuuid"
-from mcuuid import GetPlayerData
+from mcuuid.mcuuid import GetPlayerData
