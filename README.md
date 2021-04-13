@@ -7,114 +7,44 @@ Getting Minecraft Player Information from Mojang API.
 
 ### API
 ```
-from mcuuid.api import GetPlayerData
-
-player = GetPlayerData(identifier)
-
-if player.valid is True:
-    uuid = player.uuid
-    name = player.username
+> from mcuuid import MCUUID
+> player = MCUUID(name="gronkh")
+> player.name
+'Gronkh'
+> player.names
+{0: 'Gronkh'}
+> player.uuid
+'a2080281c2784181b961d99ed2f3347c'
 ```
 
-Identifier can be a username or a UUID.
-
-When `identifier = "gronkh"`:
-`uuid` will be `"a2080281c2784181b961d99ed2f3347c"`
-and `name` will be `"Gronkh"`
-
+You can also use an existing uuid to start from:
 
 ```
-player = GetPlayerData(identifier, timestamp)
+> player = MCUUID(uuid="a2080281c2784181b961d99ed2f3347c")
+> player.name
+'Gronkh'
 ```
-
-Some names are time-sensitive. (When they are changed)
-So you can choose a special time.
-
-It even works with UUIDs. They respond the username at the given time.
 
 ### Tools
-Syntax check of username
-```
-from mcuuid.tools import is_valid_minecraft_username
+Check syntax of an username:
 
-if is_valid_minecraft_username('gronkh'):
-  print('Valid')
 ```
-
-Syntaxcheck of UUID
-```
-from mcuuid.tools import is_valid_mojang_uuid
-
-if is_valid_mojang_uuid('a2080281c2784181b961d99ed2f3347c'):
-  print('Valid')
+>from mcuuid.tools import is_valid_minecraft_username
+> is_valid_minecraft_username('gronkh'):
+True
 ```
 
-## Documentation
-### Module `mcuuid.api`
-#### Class `GetPlayerData(indentifier, timestamp=None)`
-##### Parameters
-- `identifier`: string - a Minecraft username or Mojang UUID
-- `timestamp`: int - a unix timestamp
+Check syntax of an UUID:
 
-##### Returns
-`player` object
-
-#### Object `player`
-##### Value `player.uuid`
-Mojang UUID
-
-##### Value `player.username`
-Minecraft username
-
-### Module `mcuuid.tools`
-#### Function `is_valid_minecraft_username(username)`
-##### Parameters
-- `username`: string - a Minecraft username
-
-##### Returns
-`True` or `False`
-
-#### Function `is_valid_mojang_uuid(uuid)`
-##### Parameters
-- `uuid`: string - a Mojang UUID
-
-##### Returns
-`True` or `False`
-
-#### Function `cleanup_uuid(uuid)`
-##### Parameters
-- `uuid`: string - a Mojang UUID
-
-##### Returns
-`uuid` as string, lowered. Without dashes
-
-## Test file
-Usage
 ```
-$ python test.py gronkh
-```
-or
-```
-$ python test.py a2080281c2784181b961d99ed2f3347c
-```
-or
-```
-$ python test.py
-Please enter a username or UUID:
-gronkh
-```
-or
-```
-$ python test.py
-Please enter a username or UUID:
-a2080281c2784181b961d99ed2f3347c
+> from mcuuid.tools import is_valid_mojang_uuid
+> is_valid_mojang_uuid('a2080281c2784181b961d99ed2f3347c'):
+True
 ```
 
-Response:
-```
-UUID: a2080281c2784181b961d99ed2f3347c
-correct name: Gronkh
-```
+### Version information
+There is a wrapper around the new MCUUID class to still be usable using former api versions.
+They are deprecated and not recommended for future use.
 
 ## License
 This software is licensed under the MIT license. Feel free to use it however you like.
