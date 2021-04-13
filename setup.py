@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mcuuid",
-    version="0.3",
-    author="Clemens Riese",
+    version="1.0",
+    author="clerie",
     author_email="hallo@clerie.de",
     description="Getting Minecraft Player Information from Mojang API.",
     long_description=long_description,
