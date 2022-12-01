@@ -45,11 +45,11 @@ class MCUUID:
 
     def _load_by_uuid(self):
         if self._names == None:
-            r = requests.get("https://api.mojang.com/user/profiles/{uuid}/names".format(
+            r = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/{uuid}".format(
                 uuid=self._uuid,
             ), headers = {
                 'Content-Type':'application/json',
             })
             data = json.loads(r.text)
-            self._names = {d.get("changedToAt", 0): d.get("name") for d in data}
+            self._names = {0: data.get("name")}
             self._pretty_name = self._names.get(max(self._names.keys()))
