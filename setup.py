@@ -1,24 +1,26 @@
-import setuptools
+from setuptools import setup, find_packages
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup(
-    name="mcuuid",
-    version="1.1.0",
-    author="clerie",
-    author_email="hallo@clerie.de",
-    description="Getting Minecraft Player Information from Mojang API.",
+setup(
+    name="mcfetch",
+    version="1.0.0",
+    author="oDepleted",
+    author_email="contact@statalytics.net",
+    description="Modified version of mcuuid - fetches Minecraft"
+                "player information from the Mojang API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/clerie/mcuuid",
-    packages=setuptools.find_packages(),
+    url="https://github.com/oDepleted/mcfetch",
+    packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Operating System :: OS Independent"
     ],
     install_requires=[
-        'requests>=2.0.0',
+        'requests>=2.0.0'
     ],
 )

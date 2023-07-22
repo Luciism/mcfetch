@@ -1,50 +1,67 @@
-# MCUUID
-Getting Minecraft Player Information from Mojang API.
+# MCFETCH
+Fetches Minecraft player information from the Mojang API
 
 ## Usage
-1. `pip install mcuuid`
+1. `pip install mcfetch`
 2. Use the module like this:
 
 ### API
-```
-> from mcuuid import MCUUID
-> player = MCUUID(name="gronkh")
-> player.name
+```python
+>>> from mcfetch import FetchPlayer
+>>> player = FetchPlayer(name="gronkh")
+>>> player.name
 'Gronkh'
-> player.names
-{0: 'Gronkh'}
-> player.uuid
+>>> player.uuid
 'a2080281c2784181b961d99ed2f3347c'
 ```
 
-You can also use an existing uuid to start from:
+You can also start from an existing UUID:
 
-```
-> player = MCUUID(uuid="a2080281c2784181b961d99ed2f3347c")
-> player.name
+```python
+>>> from mcfetch import FetchPlayer
+>>> player = FetchPlayer(uuid="a2080281c2784181b961d99ed2f3347c")
+>>> player.name
 'Gronkh'
 ```
 
+If a player doesn't exist:
+```python
+>>> from mcfetch import FetchPlayer
+>>> player = FetchPlayer(name="ThisUsernameIsNotValid")
+>>> player.name
+None
+>>> player.uuid
+None
+```
+
 ### Tools
-Check syntax of an username:
+Check syntax of a username:
 
-```
->from mcuuid.tools import is_valid_minecraft_username
-> is_valid_minecraft_username('gronkh'):
+```python
+>>> from mcfetch import is_valid_username
+>>> is_valid_username('gronkh')
 True
+>>> is_valid_username('gronkh-is cool')
+False
 ```
 
-Check syntax of an UUID:
+Check syntax of a UUID (undashed):
 
-```
-> from mcuuid.tools import is_valid_mojang_uuid
-> is_valid_mojang_uuid('a2080281c2784181b961d99ed2f3347c'):
+```python
+>>> from mcfetch import is_valid_uuid
+>>> is_valid_uuid('a2080281c2784181b961d99ed2f3347c')
 True
+>>> is_valid_uuid('bcc28a5f6')
+False
 ```
 
-### Version information
-There is a wrapper around the new MCUUID class to still be usable using former api versions.
-They are deprecated and not recommended for future use.
+Remove dashes from a UUID:
+
+```python
+>>> from mcfetch import undash_uuid
+>>> undash_uuid('a2080281-c278-4181-b961-d99ed2f3347c')
+a2080281c2784181b961d99ed2f3347c
+```
 
 ## License
 This software is licensed under the MIT license. Feel free to use it however you like.
