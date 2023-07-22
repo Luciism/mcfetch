@@ -34,6 +34,14 @@ None
 None
 ```
 
+It is also possible to use a custom requests object:
+```python
+>>> from mcfetch import FetchPlayer
+>>> from requests_cache import CachedSession
+>>> my_cache = CachedSession(cache_name='./my_cache', expire_after=60)
+>>> player = FetchPlayer(name="gronkh", requests_obj=my_cache)
+```
+
 ### Tools
 Check syntax of a username:
 
