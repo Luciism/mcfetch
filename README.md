@@ -1,11 +1,13 @@
 # MCFETCH
 Fetches Minecraft player information from the Mojang API
 
-## Usage
-1. `pip install mcfetch`
-2. Use the module like this:
-
-### API
+## Installation
+Run the following:
+```bash
+pip install mcfetch
+```
+## How to use
+Fetch a player using their username:
 ```python
 >>> from mcfetch import FetchPlayer
 >>> player = FetchPlayer(name="gronkh")
@@ -15,7 +17,7 @@ Fetches Minecraft player information from the Mojang API
 'a2080281c2784181b961d99ed2f3347c'
 ```
 
-You can also start from an existing UUID:
+Fetch a player using their uuid:
 
 ```python
 >>> from mcfetch import FetchPlayer
@@ -25,6 +27,7 @@ You can also start from an existing UUID:
 ```
 
 If a player doesn't exist:
+
 ```python
 >>> from mcfetch import FetchPlayer
 >>> player = FetchPlayer(name="ThisUsernameIsNotValid")
@@ -35,6 +38,7 @@ None
 ```
 
 It is also possible to use a custom requests object:
+
 ```python
 >>> from mcfetch import FetchPlayer
 >>> from requests_cache import CachedSession
@@ -42,7 +46,6 @@ It is also possible to use a custom requests object:
 >>> player = FetchPlayer(name="gronkh", requests_obj=my_cache)
 ```
 
-### Tools
 Check syntax of a username:
 
 ```python
@@ -72,4 +75,4 @@ a2080281c2784181b961d99ed2f3347c
 ```
 
 ## License
-This software is licensed under the MIT license. Feel free to use it however you like.
+This software is licensed under the MIT license. Feel free to use it however you like. For more infomation see [LICENSE](https://github.com/oDepleted/mcfetch/blob/master/LICENSE).
