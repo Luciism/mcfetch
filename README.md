@@ -7,6 +7,8 @@ Run the following:
 pip install mcfetch
 ```
 ## How to use
+
+### Non asyncronous
 Fetch a player using their username:
 ```python
 >>> from mcfetch import FetchPlayer
@@ -46,6 +48,44 @@ It is also possible to use a custom requests object:
 >>> player = FetchPlayer(name="gronkh", requests_obj=my_cache)
 ```
 
+You can fetch a player's skin URL and skin texture
+```python
+>>> from mcfetch import FetchPlayer
+>>> player = FetchPlayer(name="Notch")
+>>> player.skin_url
+'http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680'
+>>> player.skin_texture
+b'\x89PNG\r\n\x1a\n\x00\x00\x00\...'
+```
+
+Fetch a player without specifying whether you are using a Username or UUID
+```python
+>>> from mcfetch import FetchPlayer2
+>>> player = FetchPlayer2("a2080281c2784181b961d99ed2f3347c")
+>>> player.name
+'Gronkh'
+>>> player = FetchPlayer2("Gronkh")
+>>> player.uuid
+'a2080281c2784181b961d99ed2f3347c'
+```
+
+
+### Asyncronous
+Fetching a player
+```python
+>>> import asyncio
+>>> from mcfetch import AsyncFetchPlayer2
+>>> async def main():
+...     player = AsyncFetchPlayer2("Gronkh")
+...     print(await player.name)
+...     print(await player.uuid)
+...
+'Gronkh'
+'a2080281c2784181b961d99ed2f3347c'
+```
+
+
+## Tools
 Check syntax of a username:
 
 ```python
