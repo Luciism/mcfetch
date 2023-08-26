@@ -47,7 +47,7 @@ def is_valid_uuid(uuid: str):
     allowed_chars = '0123456789abcdef'
     allowed_len = 32
 
-    uuid = uuid.lower()
+    uuid = uuid.lower().replace('-', '')
 
     if len(uuid) != allowed_len:
         return False

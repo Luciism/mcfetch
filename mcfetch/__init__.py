@@ -21,8 +21,10 @@ print(player.uuid)
 name = "mcfetch"
 
 from .mcfetch import *
+from .asyncmcfetch import *
 from .tools import *
 
 __all__ = [
-    'mcfetch'
+    'mcfetch',
+    'asyncmcfetch'
 ]

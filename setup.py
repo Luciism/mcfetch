@@ -21,6 +21,8 @@ setup(
         "Operating System :: OS Independent"
     ],
     install_requires=[
-        'requests>=2.0.0'
+        'requests>=2.0.0',
+        'aiohttp>=3.8.5',
+        'aiohttp_client_cache>=0.8.1'
     ],
 )
