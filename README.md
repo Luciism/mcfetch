@@ -8,7 +8,7 @@ pip install mcfetch
 ```
 ## How to use
 
-### Non asyncronous
+### Non asynchronous
 Fetch a player using their username:
 ```python
 >>> from mcfetch import FetchPlayer
@@ -70,8 +70,8 @@ Fetch a player without specifying whether you are using a Username or UUID
 ```
 
 
-### Asyncronous
-Fetching a player
+### Asynchronous
+Fetching a player (same functionality as the above examples)
 ```python
 >>> import asyncio
 >>> from mcfetch import AsyncFetchPlayer2
@@ -79,7 +79,7 @@ Fetching a player
 ...     player = AsyncFetchPlayer2("Gronkh")
 ...     print(await player.name)
 ...     print(await player.uuid)
-...
+>>> asyncio.run(main())
 'Gronkh'
 'a2080281c2784181b961d99ed2f3347c'
 ```
