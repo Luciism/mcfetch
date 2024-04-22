@@ -4,28 +4,30 @@ from base64 import b64decode
 import requests
 
 
-class FetchPlayer:
+class Player:
     def __init__(
         self,
-        name: str=None,
-        uuid: str=None,
+        player: str,
         requests_obj=requests
     ):
         """
-        Initializes a FetchPlayer object with a name and/or uuid.
+        Initializes a Player object with a name or uuid.
 
         Args:
-            name (str, optional): The player's name. Defaults to None.
-            uuid (str, optional): The player's uuid. Defaults to None.
+            player (str): The player's username or uuid.
             requests_obj (module, optional): The requests module or a compatible
             object to use for making HTTP requests. Defaults to the requests module.
 
         Raises:
             AssertionError: If both name and uuid are None or if both are not None.
         """
-        assert (name, uuid).count(None) == 1
-        self._name = name
-        self._uuid = uuid
+        self._uuid = None
+        self._name = None
+
+        if len(player) > 16:
+            self._uuid = player
+        else:
+            self._name = player
 
         self._pretty_name = None
 
@@ -110,21 +112,3 @@ class FetchPlayer:
 
                     self._skin_url = textures.get('textures', {}).get('SKIN', {}).get('url')
                     break
-
-
-class FetchPlayer2(FetchPlayer):
-    def __init__(self, identifier: str, requests_obj=requests):
-        """
-        Wrapper for the `FetchPlayer` class that allows either a username or uuid to
-        be passed as the `identifier` parameter. Whether the identifier is a username
-        or uuid will be determined by its length.
-
-        Args:
-            identifier (str, optional): The player's username or uuid.
-            requests_obj (module | class, optional): The requests module or a compatible
-            object to use for making HTTP requests. Defaults to the requests module.
-        """
-        if len(identifier) > 16:
-            super().__init__(uuid=identifier, requests_obj=requests_obj)
-        else:
-            super().__init__(name=identifier, requests_obj=requests_obj)

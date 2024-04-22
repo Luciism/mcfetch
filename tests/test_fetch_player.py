@@ -1,8 +1,8 @@
-from mcfetch import FetchPlayer, FetchPlayer2
+from mcfetch import Player
 from requests_cache import CachedSession
 
 
-class BaseTestFetchPlayer:
+class _TestPlayerBase:
     def setup_method(self):
         self.existing_player = self.get_existing_player_instance()
         self.non_existing_player = self.get_non_existing_player_instance()
@@ -33,58 +33,38 @@ class BaseTestFetchPlayer:
 
 
 
-class TestFetchPlayerByName(BaseTestFetchPlayer):
+class TestPlayerByName(_TestPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(name='Notch')
+        return Player(player='Notch')
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(name='Bitch')
+        return Player(player='Bitch')
 
 
-class TestFetchPlayerByUUID(BaseTestFetchPlayer):
+class TestPlayerByUUID(_TestPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(uuid='069a79f444e94726a5befca90e38aaf5')
+        return Player(player='069a79f444e94726a5befca90e38aaf5')
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(uuid='abcdefghijklmnopqrstuvwxyz')
+        return Player(player='abcdefghijklmnopqrstuvwxyz')
 
 
 
 session = CachedSession(cache_name='.cache/test', expire_after=60)
 
-class TestFetchPlayerByNameWithCaching(BaseTestFetchPlayer):
+class TestPlayerByNameWithCaching(_TestPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(name='Notch', requests_obj=session)
+        return Player(player='Notch', requests_obj=session)
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(name='Bitch', requests_obj=session)
+        return Player(player='Bitch', requests_obj=session)
 
 
-class TestFetchPlayerByUUIDWithCaching(BaseTestFetchPlayer):
+class TestPlayerByUUIDWithCaching(_TestPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(
-            uuid='069a79f444e94726a5befca90e38aaf5', requests_obj=session)
+        return Player(
+            player='069a79f444e94726a5befca90e38aaf5', requests_obj=session)
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(
-            uuid='abcdefghijklmnopqrstuvwxyz', requests_obj=session)
-
-
-class TestFetchPlayerDynamicallyByNameWithCaching(BaseTestFetchPlayer):
-    def get_existing_player_instance(self):
-        return FetchPlayer2(
-            'Notch', requests_obj=session)
-
-    def get_non_existing_player_instance(self):
-        return FetchPlayer2(
-            'Bitch', requests_obj=session)
-
-
-class TestFetchPlayerDynamicallyByUUIDWithCaching(BaseTestFetchPlayer):
-    def get_existing_player_instance(self):
-        return FetchPlayer2(
-            '069a79f444e94726a5befca90e38aaf5', requests_obj=session)
-
-    def get_non_existing_player_instance(self):
-        return FetchPlayer2(
-            'abcdefghijklmnopqrstuvwxyz', requests_obj=session)
+        return Player(
+            player='abcdefghijklmnopqrstuvwxyz', requests_obj=session)

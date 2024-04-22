@@ -5,28 +5,30 @@ from aiohttp import ClientSession
 from aiohttp_client_cache import CacheBackend, CachedSession
 
 
-class AsyncFetchPlayer:
+class AsyncPlayer:
     def __init__(
         self,
-        name: str=None,
-        uuid: str=None,
+        player: str,
         cache_backend: CacheBackend=None
     ):
         """
-        Initializes a FetchPlayer object with a name and/or uuid.
+        Initializes an AsyncPlayer object with a name or uuid.
 
         Args:
-            name (str, optional): The player's name. Defaults to None.
-            uuid (str, optional): The player's uuid. Defaults to None.
+            player (str): The player's username or uuid.
             cache_backend (class, optional): The backend used for caching
             responses, if `None`, caching won't be used.
 
         Raises:
             AssertionError: If both name and uuid are None or if both are not None.
         """
-        assert (name, uuid).count(None) == 1
-        self._name = name
-        self._uuid = uuid
+        self._uuid = None
+        self._name = None
+
+        if len(player) > 16:
+            self._uuid = player
+        else:
+            self._name = player
 
         self._pretty_name = None
 
@@ -128,25 +130,3 @@ class AsyncFetchPlayer:
                     break
 
             self._has_loaded_by_uuid == True
-
-
-class AsyncFetchPlayer2(AsyncFetchPlayer):
-    def __init__(
-        self,
-        identifier: str,
-        cache_backend: CacheBackend=None
-    ):
-        """
-        Wrapper for the `FetchPlayer` class that allows either a username or uuid to
-        be passed as the `identifier` parameter. Whether the identifier is a username
-        or uuid will be determined by its length.
-
-        Args:
-            identifier (str, optional): The player's username or uuid.
-            cache_backend (class, optional): The backend used for caching
-            responses, if `None`, caching won't be used.
-        """
-        if len(identifier) > 16:
-            super().__init__(uuid=identifier, cache_backend=cache_backend)
-        else:
-            super().__init__(name=identifier, cache_backend=cache_backend)

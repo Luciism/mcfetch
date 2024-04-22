@@ -74,3 +74,19 @@ def undash_uuid(uuid: str):
     uuid = uuid.lower()
     uuid = uuid.replace('-', '')
     return uuid
+
+
+def dash_uuid(uuid: str):
+    """
+    Inserts dashes (-) at the standard positions in a UUID string.
+
+    Args:
+        uuid: A string representation of a UUID without dashes.
+
+    Returns:
+        A string representation of the UUID with dashes inserted.
+    """
+    if len(uuid) != 32:
+        raise ValueError("Invalid UUID string length. Must be 32 characters.")
+
+    return f"{uuid[0:8]}-{uuid[8:12]}-{uuid[12:16]}-{uuid[16:20]}-{uuid[20:]}"

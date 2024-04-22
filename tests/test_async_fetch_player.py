@@ -1,15 +1,16 @@
 import pytest
 
-from mcfetch import FetchPlayer, FetchPlayer2
+from aiohttp_client_cache import SQLiteBackend
+from mcfetch import AsyncPlayer
 from requests_cache import CachedSession
 
 
-class BaseTestFetchPlayer:
+class _TestAsyncPlayerBase:
     def setup_method(self):
-        self.existing_player: FetchPlayer = \
+        self.existing_player: AsyncPlayer = \
             self.get_existing_player_instance()
 
-        self.non_existing_player: FetchPlayer = \
+        self.non_existing_player: AsyncPlayer = \
             self.get_non_existing_player_instance()
 
 
@@ -18,86 +19,66 @@ class BaseTestFetchPlayer:
 
     @pytest.mark.asyncio
     async def test_fetch_player_uuid_by_existing_player(self):
-        assert self.existing_player.uuid is not None
+        assert await self.existing_player.uuid is not None
 
     @pytest.mark.asyncio
     async def test_fetch_player_name_by_existing_player(self):
-        assert self.existing_player.name is not None
+        assert await self.existing_player.name is not None
 
     @pytest.mark.asyncio
     async def test_fetch_player_name_by_non_existing_player(self):
-        assert self.non_existing_player.name is None
+        assert await self.non_existing_player.name is None
 
     @pytest.mark.asyncio
     async def test_fetch_player_skin_url_by_existing_player(self):
-        assert self.existing_player.skin_url is not None
+        assert await self.existing_player.skin_url is not None
 
     @pytest.mark.asyncio
     async def test_fetch_player_skin_url_by_non_existing_player(self):
-        assert self.non_existing_player.skin_url is None
+        assert await self.non_existing_player.skin_url is None
 
     @pytest.mark.asyncio
     async def test_fetch_player_skin_texture_by_existing_player(self):
-        assert self.existing_player.skin_texture is not None
+        assert await self.existing_player.skin_texture is not None
 
     @pytest.mark.asyncio
     async def test_fetch_player_skin_texture_by_non_existing_player(self):
-        assert self.non_existing_player.skin_texture is None
+        assert await self.non_existing_player.skin_texture is None
 
 
 
-class TestFetchPlayerByName(BaseTestFetchPlayer):
+class TestAsyncPlayerByName(_TestAsyncPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(name='Notch')
+        return AsyncPlayer(player='Notch')
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(name='Bitch')
+        return AsyncPlayer(player='Bitch')
 
 
-class TestFetchPlayerByUUID(BaseTestFetchPlayer):
+class TestAsyncPlayerByUUID(_TestAsyncPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(uuid='069a79f444e94726a5befca90e38aaf5')
+        return AsyncPlayer(player='069a79f444e94726a5befca90e38aaf5')
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(uuid='abcdefghijklmnopqrstuvwxyz')
+        return AsyncPlayer(player='abcdefghijklmnopqrstuvwxyz')
 
 
 
-session = CachedSession(cache_name='.cache/test', expire_after=60)
+session = SQLiteBackend(cache_name='.cache/test', expire_after=60)
 
-class TestFetchPlayerByNameWithCaching(BaseTestFetchPlayer):
+class TestAsyncPlayerByNameWithCaching(_TestAsyncPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(name='Notch', requests_obj=session)
+        return AsyncPlayer(player='Notch', cache_backend=session)
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(name='Bitch', requests_obj=session)
+        return AsyncPlayer(player='Bitch', cache_backend=session)
 
 
-class TestFetchPlayerByUUIDWithCaching(BaseTestFetchPlayer):
+class TestAsyncPlayerByUUIDWithCaching(_TestAsyncPlayerBase):
     def get_existing_player_instance(self):
-        return FetchPlayer(
-            uuid='069a79f444e94726a5befca90e38aaf5', requests_obj=session)
+        return AsyncPlayer(
+            player='069a79f444e94726a5befca90e38aaf5', cache_backend=session)
 
     def get_non_existing_player_instance(self):
-        return FetchPlayer(
-            uuid='abcdefghijklmnopqrstuvwxyz', requests_obj=session)
-
-
-class TestFetchPlayerDynamicallyByNameWithCaching(BaseTestFetchPlayer):
-    def get_existing_player_instance(self):
-        return FetchPlayer2(
-            'Notch', requests_obj=session)
-
-    def get_non_existing_player_instance(self):
-        return FetchPlayer2(
-            'Bitch', requests_obj=session)
-
-
-class TestFetchPlayerDynamicallyByUUIDWithCaching(BaseTestFetchPlayer):
-    def get_existing_player_instance(self):
-        return FetchPlayer2(
-            '069a79f444e94726a5befca90e38aaf5', requests_obj=session)
-
-    def get_non_existing_player_instance(self):
-        return FetchPlayer2(
-            'abcdefghijklmnopqrstuvwxyz', requests_obj=session)
+        return AsyncPlayer(
+            player='abcdefghijklmnopqrstuvwxyz', cache_backend=session)
