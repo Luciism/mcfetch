@@ -7,13 +7,13 @@ with open("README.md", "r") as fh:
 setup(
     name="mcfetch",
     version="2.0.0",
-    author="oDepleted",
-    author_email="contact@statalytics.net",
+    author="Lucism",
+    author_email="contact@lucism.dev",
     description="Modified version of mcuuid - fetches Minecraft"
                 "player information from the Mojang API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/oDepleted/mcfetch",
+    url="https://github.com/Luciism/mcfetch",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
