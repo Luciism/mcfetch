@@ -6,10 +6,10 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mcfetch",
-    version="2.0.0",
+    version="2.1.0",
     author="Lucism",
     author_email="contact@lucism.dev",
-    description="Modified version of mcuuid - fetches Minecraft"
+    description="Modified version of mcuuid - fetches Minecraft "
                 "player information from the Mojang API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -22,7 +22,7 @@ setup(
     ],
     install_requires=[
         'requests>=2.0.0',
-        'aiohttp>=3.8.5',
+        'aiohttp>=3.9.4',
         'aiohttp_client_cache>=0.8.1'
-    ],
+    ]
 )

@@ -1,6 +1,7 @@
 **/__pycache__/
 **/.env
 .cache/
+.vscode/
 
 build/
 *.egg-info/

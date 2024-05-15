@@ -1,23 +1,41 @@
+import asyncio
 import json
 from base64 import b64decode
 
-from aiohttp import ClientSession
+from aiohttp import (
+    ClientError,
+    ClientSession,
+    ClientTimeout,
+    ContentTypeError,
+    StreamReader,
+)
 from aiohttp_client_cache import CacheBackend, CachedSession
+
+from .exceptions import RequestFailedError
 
 
 class AsyncPlayer:
     def __init__(
         self,
         player: str,
-        cache_backend: CacheBackend=None
-    ):
+        cache_backend: CacheBackend=None,
+        request_retries: int=3,
+        request_retry_delay: int=3,
+        request_timeout: int=4
+    ) -> None:
         """
         Initializes an AsyncPlayer object with a name or uuid.
 
         Args:
             player (str): The player's username or uuid.
-            cache_backend (class, optional): The backend used for caching
-            responses, if `None`, caching won't be used.
+            cache_backend (class, optional): The backend used for caching \
+                responses, if `None`, caching won't be used.
+            request_retries (int, optional): The amount of times to reattempt the \
+                request if failed.
+            request_retry_delay (int, optional): The delay (in seconds) to wait before \
+                retrying the request
+            request_timeout (int, optional): The amount of time to terminate the request \
+                after if no response is delivered.
 
         Raises:
             AssertionError: If both name and uuid are None or if both are not None.
@@ -36,10 +54,13 @@ class AsyncPlayer:
         self._skin_texture = None
 
         self._player_exists = True
-
         self._has_loaded_by_uuid = False
 
         self.cache_backend = cache_backend
+
+        self._request_retries = request_retries
+        self._request_retry_delay = request_retry_delay
+        self._request_timeout = request_timeout
 
 
     @property
@@ -77,27 +98,52 @@ class AsyncPlayer:
             skin_url = await self.skin_url
             if skin_url is None:
                 return None
-            texture = (await self._make_request(skin_url)).content
+            texture = await self._make_request_with_err_handling(skin_url)
             self._skin_texture = await texture.read()
 
         return self._skin_texture
 
 
     async def _make_request(self, url: str):
+        timeout = ClientTimeout(total=self._request_timeout)
+
         if self.cache_backend is None:
-            async with ClientSession() as session:
+            async with ClientSession(timeout=timeout) as session:
                 data = await session.get(url)
         else:
-            async with CachedSession(cache=self.cache_backend) as session:
+            async with CachedSession(
+                cache=self.cache_backend, timeout=timeout
+            ) as session:
                 data = await session.get(url)
         return data
 
 
+    async def _make_request_with_err_handling(
+        self,
+        url: str,
+        as_json: bool=False,
+        _attempt: int=1
+    ) -> dict | StreamReader:
+        try:
+            res = await self._make_request(url)
+            if as_json:
+                return await res.json()
+            return res.content
+        except (TimeoutError, ClientError, ContentTypeError) as exc:
+            if _attempt > self._request_retries:  # Max retries exceeded
+                raise RequestFailedError(exc) from exc
+
+            await asyncio.sleep(self._request_retry_delay)
+            return await self._make_request_with_err_handling(
+                url, as_json, _attempt=_attempt+1)
+
+
     async def _load_by_name(self):
         if self._uuid is None and self._player_exists:
-            data: dict = await (await self._make_request(
-                f"https://api.mojang.com/users/profiles/minecraft/{self._name}"
-            )).json()
+            data = await self._make_request_with_err_handling(
+                f"https://api.mojang.com/users/profiles/minecraft/{self._name}",
+                as_json=True
+            )
 
             self._uuid = data.get("id")
             self._pretty_name = data.get("name")
@@ -108,9 +154,10 @@ class AsyncPlayer:
 
     async def _load_by_uuid(self):
         if (not self._has_loaded_by_uuid) and self._player_exists:
-            data: dict = await (await self._make_request(
-                f"https://sessionserver.mojang.com/session/minecraft/profile/{self._uuid}"
-            )).json()
+            data = await self._make_request_with_err_handling(
+                f"https://sessionserver.mojang.com/session/minecraft/profile/{self._uuid}",
+                as_json=True
+            )
 
             name = data.get("name")
 
@@ -129,4 +176,4 @@ class AsyncPlayer:
                     self._skin_url = textures.get('textures', {}).get('SKIN', {}).get('url')
                     break
 
-            self._has_loaded_by_uuid == True
+            self._has_loaded_by_uuid = True

@@ -1,8 +1,7 @@
 import pytest
 
 from aiohttp_client_cache import SQLiteBackend
-from mcfetch import AsyncPlayer
-from requests_cache import CachedSession
+from mcfetch import AsyncPlayer, RequestFailedError
 
 
 class _TestAsyncPlayerBase:

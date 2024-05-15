@@ -10,9 +10,9 @@ To use this package, simply import it and create a
 `FetchPlayer` object with the player's name or UUID:
 
 ```python
-from mcfetch import FetchPlayer
+from mcfetch import Player
 
-player = FetchPlayer(name='Notch')
+player = Player(name='Notch')
 print(player.name)
 print(player.uuid)
 ```
@@ -20,8 +20,9 @@ print(player.uuid)
 
 name = "mcfetch"
 
-from .mcfetch import *
-from .asyncmcfetch import *
+from .asyncmcfetch import AsyncPlayer as AsyncPlayer
+from .exceptions import RequestFailedError as RequestFailedError
+from .mcfetch import Player as Player
 from .tools import *
 
 __all__ = [
