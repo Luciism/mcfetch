@@ -6,8 +6,8 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mcfetch",
-    version="2.1.0",
-    author="Lucism",
+    version="2.1.1",
+    author="clerie, Lucism",
     author_email="contact@lucism.dev",
     description="Modified version of mcuuid - fetches Minecraft "
                 "player information from the Mojang API",

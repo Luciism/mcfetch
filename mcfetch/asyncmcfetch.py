@@ -98,8 +98,7 @@ class AsyncPlayer:
             skin_url = await self.skin_url
             if skin_url is None:
                 return None
-            texture = await self._make_request_with_err_handling(skin_url)
-            self._skin_texture = await texture.read()
+            self._skin_texture = await self._make_request_with_err_handling(skin_url)
 
         return self._skin_texture
 
@@ -128,7 +127,7 @@ class AsyncPlayer:
             res = await self._make_request(url)
             if as_json:
                 return await res.json()
-            return res.content
+            return await res.content.read()
         except (TimeoutError, ClientError, ContentTypeError) as exc:
             if _attempt > self._request_retries:  # Max retries exceeded
                 raise RequestFailedError(exc) from exc
