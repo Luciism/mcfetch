@@ -3,7 +3,7 @@ import time
 from base64 import b64decode
 
 import requests
-from requests import JSONDecodeError, RequestException
+from requests import RequestException
 
 from .exceptions import RequestFailedError
 

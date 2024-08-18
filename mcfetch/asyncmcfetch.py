@@ -1,6 +1,7 @@
 import asyncio
 import json
 from base64 import b64decode
+from typing import Any, Callable, Coroutine, TypeVar
 
 from aiohttp import (
     ClientError,
@@ -8,6 +9,7 @@ from aiohttp import (
     ClientTimeout,
     ContentTypeError,
     StreamReader,
+    ClientResponse
 )
 from aiohttp_client_cache import CacheBackend, CachedSession
 
@@ -103,18 +105,20 @@ class AsyncPlayer:
         return self._skin_texture
 
 
-    async def _make_request(self, url: str):
+    ResponseT = TypeVar("T")
+    async def _make_request(
+        self,
+        url: str,
+        validator: Callable[[ClientResponse], Coroutine[Any, Any, ResponseT]]
+    ) -> ResponseT:
         timeout = ClientTimeout(total=self._request_timeout)
 
         if self.cache_backend is None:
             async with ClientSession(timeout=timeout) as session:
-                data = await session.get(url)
-        else:
-            async with CachedSession(
-                cache=self.cache_backend, timeout=timeout
-            ) as session:
-                data = await session.get(url)
-        return data
+                return await validator(await session.get(url))
+
+        async with CachedSession(cache=self.cache_backend, timeout=timeout) as session:
+            return await validator(await session.get(url))
 
 
     async def _make_request_with_err_handling(
@@ -122,12 +126,12 @@ class AsyncPlayer:
         url: str,
         as_json: bool=False,
         _attempt: int=1
-    ) -> dict | StreamReader:
+    ) -> dict | bytes:
         try:
-            res = await self._make_request(url)
             if as_json:
-                return await res.json()
-            return await res.content.read()
+                return await self._make_request(url, lambda res: res.json())
+            return await self._make_request(url, lambda res: res.content.read())
+
         except (TimeoutError, ClientError, ContentTypeError) as exc:
             if _attempt > self._request_retries:  # Max retries exceeded
                 raise RequestFailedError(exc) from exc

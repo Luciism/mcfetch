@@ -6,11 +6,12 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mcfetch",
-    version="2.1.1",
+    version="2.1.2",
     author="clerie, Lucism",
     author_email="contact@lucism.dev",
-    description="Modified version of mcuuid - fetches Minecraft "
-                "player information from the Mojang API",
+    description=
+        "Modified version of mcuuid - fetches Minecraft "
+        "player information from the Mojang API",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Luciism/mcfetch",
@@ -21,7 +22,7 @@ setup(
         "Operating System :: OS Independent"
     ],
     install_requires=[
-        'requests>=2.0.0',
+        'requests>=2.31.0',
         'aiohttp>=3.9.4',
         'aiohttp_client_cache>=0.8.1'
     ]
