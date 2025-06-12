@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mcfetch",
-    version="2.1.2",
+    version="2.1.3",
     author="clerie, Lucism",
     author_email="contact@lucism.dev",
     description=
