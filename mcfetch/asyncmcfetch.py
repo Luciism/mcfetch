@@ -144,7 +144,7 @@ class AsyncPlayer:
     async def _load_by_name(self):
         if self._uuid is None and self._player_exists:
             data = await self._make_request_with_err_handling(
-                f"https://api.mojang.com/users/profiles/minecraft/{self._name}",
+                f"https://api.minecraftservices.com/minecraft/profile/lookup/name/{self._name}",
                 as_json=True
             )
 
