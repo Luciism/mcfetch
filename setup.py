@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mcfetch",
-    version="2.1.3",
+    version="2.1.4",
     author="clerie, Lucism",
     author_email="contact@lucism.dev",
     description=
@@ -22,7 +22,7 @@ setup(
         "Operating System :: OS Independent"
     ],
     install_requires=[
-        'requests>=2.31.0',
+        'requests>=2.33.0',
         'aiohttp>=3.9.4',
         'aiohttp_client_cache>=0.8.1'
     ]
